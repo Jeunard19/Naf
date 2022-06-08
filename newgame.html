@@ -105,6 +105,19 @@
             ]
           });
         }
+                
+                   if (!NAF.schemas.hasTemplate("#selection-template")) {
+          NAF.schemas.add({
+            template: '#selection-template',
+            components: [
+              "position"
+              ,{
+                component: 'text',
+                property: 'value'
+              }
+            ]
+          });
+        }
         const components = NAF.schemas.getComponentsOriginal(template);
         return components;
       }
@@ -228,6 +241,13 @@
           <a-entity ></a-entity>
 
   </template>
+  
+      <template id="selection-template">
+
+          <a-entity ></a-entity>
+
+  </template>
+			
 			
 		</a-assets>
 		
@@ -257,6 +277,7 @@
         <a-entity id="alert2" text="align:center;wrapCount:10;" rotation="0 180 0" networked="template:#alert-template;networkId:alert2;persistent:true;owner:scene" restart></a-entity>
          <a-entity id="score" text="align:center;wrapCount:10;value:0" rotation="0 180 0" networked="template:#alert-template;networkId:alert3;persistent:true;owner:scene" visible="false" ></a-entity>
      <a-entity id="states" text="value:P1D2" networked="template:#state-template;networkId:state;persistent:true;owner:scene" visible="false" ></a-entity>
+          <a-entity id="selection" text="value:none" networked="template:#selection-template;networkId:selection;persistent:true;owner:scene" visible="false" ></a-entity>
 
 
    <a-entity id="camera-rig"
@@ -289,6 +310,7 @@ AFRAME.registerComponent('color-changer', {
 init: function(){
 	this.player = document.querySelector('#camera-rig')
 	this.state = document.querySelector('#states')
+	this.selection = document.querySelector('#selection')
 	this.optionId = ""
 	},
 
@@ -307,9 +329,9 @@ init: function(){
  if(this.el1.getAttribute('visible') && this.el2.getAttribute('visible') && this.el3.getAttribute('visible')){
 	  if(this.el1.getAttribute('material').color === "red" && this.el2.getAttribute('material').color === "red" && this.el3.getAttribute('material').color === "red"){
 		       this.el.setAttribute('material', {color:"black"});
+		       this.selection.setAttribute('text', {value: this.el.getAttribute("text").value})
 		        NAF.utils.takeOwnership( this.el);
-
-
+		         NAF.utils.takeOwnership( this.selection);
 	  }}
     }
     }
@@ -392,6 +414,11 @@ init: function() {
 	
 	this.name = []
 	this.roles = []
+	
+	this.timestamp = []
+	this.target = []
+	this.selection = []
+	
 	this.limit= 0 
 
 
@@ -399,13 +426,16 @@ init: function() {
 
 ,
 
-	 sendJSON:function(name,roles,positionX, positionsY, positionsZ ) {
+	 sendJSON:function(name,roles, timestamp, positionX, positionsY, positionsZ, target, selection ) {
     var data = {
         name: name,
         roles:roles,
+        timestamp:timestamp,
         x: positionX,
         y:positionsY,
-        z:positionsZ
+        z:positionsZ,
+        target:target,
+        selection:selection
     };
 
     var json = JSON.stringify(data);
@@ -419,6 +449,41 @@ init: function() {
 }
 ,
 
+	 sendJSON2:function(name,roles, timestamp, positionX, positionsY, positionsZ, target, selection ) {
+    var data = {
+        name: name,
+        roles:roles,
+        timestamp:timestamp,
+        x: positionX,
+        y:positionsY,
+        z:positionsZ,
+        target:target,
+        selection:selection
+    };
+
+    var json = JSON.stringify(data);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "https://log.weak-monkey-2.telebit.io/resource2");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+    console.log(json)
+    xhr.send(json);
+}
+,
+
+  secondsToString:function(seconds)
+{
+var numyears = Math.floor(seconds / 31536000);
+var numdays = Math.floor((seconds % 31536000) / 86400); 
+var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
+var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
+return numyears + " years " +  numdays + " days " + numhours + " hours " + numminutes + " minutes " + numseconds + " seconds";
+
+}
+,
+
 
 	
 
@@ -429,6 +494,16 @@ tick:  function() {
 	var state = document.querySelector('#states')
 	var player1 = document.querySelector('#P1')
 	var player2 = document.querySelector('#P2')
+	
+		if(player1){
+				var player = player1
+				var hand = document.querySelector('#Ball1')
+			} else if (player2) {
+				var player = player2
+				var hand = document.querySelector('#Ball2')
+				}
+	
+	
 
 
 	alert = document.querySelector('#alert')
@@ -439,35 +514,74 @@ tick:  function() {
 
 	
 
+		
+		if(state.getAttribute("text").value.includes("correct")&&this.name.length > 0){
+			if(player1){
+			if(hand && this.limit){
+			this.sendJSON(this.name, this.roles, this.timestamp,this.positionsX, this.positionsY, this.positionsZ, this.target, this.selection)
+			this.name = []
+			this.positionsX = []
+			this.positionsY = []
+			this.positionsZ = []
+			this.selection = []
+			this.target = []
+			this.timestamp = []
+			this.roles = []
+			}}
+			else if(player2) {
+				if(hand && this.limit){
+			this.sendJSON2(this.name, this.roles, this.timestamp,this.positionsX, this.positionsY, this.positionsZ, this.target, this.selection)
+			this.name = []
+			this.positionsX = []
+			this.positionsY = []
+			this.positionsZ = []
+			this.selection = []
+			this.target = []
+			this.timestamp = []
+			this.roles = []
+			}
+				
+				}
+			}
+	
+
+ if(state.getAttribute("text").value === "P1D2"|| state.getAttribute("text").value === "P2D1"){
+
 	if(hand  &&  this.limit > 60){
 		this.positionsX.push(hand.getAttribute("position").x)
 		this.positionsY.push(hand.getAttribute("position").y)
 		this.positionsZ.push(hand.getAttribute("position").z)
+		this.selection.push("  ")
 		if(player1){
 				this.name.push("player1")
+				if(state.getAttribute("text").value === "P1D2") {
+					this.roles.push("matcher")
+					} else if (state.getAttribute("text").value === "P2D1") {
+						this.roles.push("director")
+						}
 			} else if (player2) {
-				this.name.push("player1")
+				this.name.push("player2")
+				
+				if(state.getAttribute("text").value === "P1D2") {
+					this.roles.push("director")
+					} else if (state.getAttribute("text").value === "P2D1") {
+						this.roles.push("matcher")
+						}
+				
 				}
 	
-		this.roles.push("hello")
+		
+		this.target.push(document.querySelector('#A').getAttribute("text").value)
+		this.timestamp.push(this.secondsToString(new Date().getTime()))
+		
 
 		this.limit = 0
 		}
-	
-//	if(state.getAttribute("text").value === "P1D2"|| state.getAttribute("text").value  === "P2D1") {
-	//	this.start = true
-		//} else {
-			//this.start = false
-			//}
- if(state.getAttribute("text").value === "P1D2"|| state.getAttribute("text").value === "P2D1"){
+	 
+	 
+	 
 	if(this.start !==false ){
-		if(hand && this.limit){
-			this.sendJSON(this.name, this.roles,this.positionsX, this.positionsY, this.positionsZ)
-			this.name = []
-			this.positionsX = []
-			 this.positionsY = []
-			this.positionsZ = []
-			}
+
 		 this.start = false
 		
 		var A = document.querySelector('#A');
@@ -529,7 +643,11 @@ let shuffled_options = options
       NAF.utils.takeOwnership(el2)
 }
 
-}	} else {this.start = true}
+}	} else {
+	this.start = true
+	
+	
+	}
 }
 });
 
