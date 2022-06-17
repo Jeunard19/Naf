@@ -107,6 +107,20 @@
             ]
           });
         }
+        
+        
+                   if (!NAF.schemas.hasTemplate("#score-template")) {
+          NAF.schemas.add({
+            template: '#score-template',
+            components: [
+              "position"
+              ,{
+                component: 'text',
+                property: 'value'
+              }
+            ]
+          });
+        }
                 
                    if (!NAF.schemas.hasTemplate("#selection-template")) {
           NAF.schemas.add({
@@ -131,7 +145,7 @@
   <body>
 	  
     <a-scene networked-scene="
-      room: myroom;
+      room: myroom3;
       debug: true;
       adapter: wseasyrtc;"
       
@@ -189,6 +203,10 @@
         <a-entity position="0 1.5 0"  ></a-entity>
         </template>
         
+         <template id ="score-template">
+        <a-entity position="0 1 0"  ></a-entity>
+        </template>
+        
             <!-- Hands -->
         <template id="left-hand-template">
           <a-entity>
@@ -213,7 +231,7 @@
         <!--      a few spheres make a head + eyes + pupils    -->
         <template id="head-template">
      <a-entity class="avatar" player-info>
-            <a-entity class="face" position="0 0.05 0" >
+            <a-entity class="face" position="0 1.5 0" >
             </a-entity>
           </a-entity>
         </template>
@@ -233,12 +251,7 @@
   </template>
   
 
-  
-    <template id="ball-location">
 
-          <a-entity geometry="primitive: sphere; radius: 0.15" material="color: blue;opacity: 0.2;" ></a-entity>
-
-  </template>
   
     <template id="state-template">
 
@@ -256,7 +269,7 @@
 		</a-assets>
 		
  
-<a-entity id="start1" networked="template:#ball-location;networkId:ballloc1;persistent:true;owner:scene" position="0 1 1.5"></a-entity>
+
 
         
         <a-entity id="model" visible="true" game2 >
@@ -277,9 +290,16 @@
           
         </a-entity>
         
-        <a-entity id="alert" text="align:center;wrapCount:10;" networked="template:#alert-template;networkId:alert;persistent:true;owner:scene" restart></a-entity>
-        <a-entity id="alert2" text="align:center;wrapCount:10;" rotation="0 180 0" networked="template:#alert-template;networkId:alert2;persistent:true;owner:scene" restart></a-entity>
-         <a-entity id="score" text="align:center;wrapCount:10;value:0" rotation="0 180 0" networked="template:#alert-template;networkId:alert3;persistent:true;owner:scene" visible="false" ></a-entity>
+        <a-entity id="alert" text="align:center;wrapCount:10;" networked="template:#alert-template;networkId:alert;persistent:true;owner:scene" restart>
+        
+        </a-entity>
+        <a-entity id="alert2" text="align:center;wrapCount:10;" rotation="0 180 0" networked="template:#alert-template;networkId:alert2;persistent:true;owner:scene" restart>
+          
+        </a-entity>
+         <a-entity id="score" text="align:center;wrapCount:10;value:0" rotation="0 180 0"  networked="template:#score-template;networkId:alert3;persistent:true;owner:scene" visible="true" ></a-entity>
+          <a-entity id="score2" text="align:center;wrapCount:10;value:0" rotation="0 0 0" networked="template:#score-template;networkId:alert4;persistent:true;owner:scene" visible="true" ></a-entity>
+        
+       
      <a-entity id="states" text="value:P1D2" networked="template:#state-template;networkId:state;persistent:true;owner:scene" visible="false" ></a-entity>
           <a-entity id="selection" text="value:none" networked="template:#selection-template;networkId:selection;persistent:true;owner:scene" visible="false" ></a-entity>
 
@@ -352,11 +372,14 @@ init: function(){
 		init:function(){
 			this.counter =0
 			this.results = "non"
+			this.score = 0
 			}
 		,
 		tick:function(){
 	var player = document.querySelector('#P3')
 	if(player){ 
+	var score = document.querySelector('#score')
+	var score2 = document.querySelector('#score2')
 		
   	if(this.el.getAttribute('material').color === "black"){
 		this.counter += 1
@@ -367,6 +390,20 @@ if(this.results === "non"){
 		
 		if(concept.getAttribute('text').value === this.el.getAttribute('text').value){
 			this.results = "correct"
+			if(this.counter === 1){
+				var score_current = parseInt(score.getAttribute("text").value)
+				score_current += 1
+			score.setAttribute("text",{value:score_current})
+			score2.setAttribute("text",{value:score_current})
+			NAF.utils.takeOwnership(score)
+			NAF.utils.takeOwnership(score2)
+				} 
+				
+		
+				
+	
+		
+	
 			} else {
 				this.results = "incorrect"
 				}
