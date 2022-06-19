@@ -283,9 +283,15 @@
    
           <a-plane id = "A2"  visible="true" text="value: Hello World;align:center;wrapCount:10;" width="1" height="0.5" color="red" position="0 0.5 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:A2;persistent:true;owner:scene" changestate></a-plane>
           <a-plane id = "A3" visible="true"  text="value: Hello World;align:center;wrapCount:10;" width="1" height="0.5" color="red" position="1.5 0.5 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:A3;persistent:true;owner:scene" changestate ></a-plane>
+                 <a-plane id = "A4"  visible="true" text="value: Hello World;align:center;wrapCount:10;" width="1" height="0.5" color="red" position="-3 0.5 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:A4;persistent:true;owner:scene" changestate></a-plane>
+          <a-plane id = "A5" visible="true"  text="value: Hello World;align:center;wrapCount:10;" width="1" height="0.5" color="red" position="3 0.5 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:A5;persistent:true;owner:scene" changestate ></a-plane>
+          
           <a-plane id = "B1" visible="true"  text="value: Hello World;align:center;wrapCount:10;" width="1" height="0.5" color="red" position="-1.5 0.5 0" rotation="0 180 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:B1;persistent:true;owner:scene" changestate></a-plane>
           <a-plane id = "B2" visible="true"  text="value: Hello World;align:center;wrapCount:10;" width="1" height="0.5" color="red" position="0 0.5 0" rotation="0 180 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:B2;persistent:true;owner:scene" changestate></a-plane>
           <a-plane id = "B3" visible="true"  text="value: Hello World;align:center;wrapCount:10;"  width="1" height="0.5" color="red" position="1.5 0.5 0" rotation="0 180 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:B3;persistent:true;owner:scene" changestate></a-plane>
+           <a-plane id = "B4" visible="true"  text="value: Hello World;align:center;wrapCount:10;" width="1" height="0.5" color="red" position="-3 0.5 0" rotation="0 180 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:B4;persistent:true;owner:scene" changestate></a-plane>
+          <a-plane id = "B5" visible="true"  text="value: Hello World;align:center;wrapCount:10;"  width="1" height="0.5" color="red" position="3 0.5 0" rotation="0 180 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:B5;persistent:true;owner:scene" changestate></a-plane>
+       
           
           
         </a-entity>
@@ -341,17 +347,21 @@ init: function(){
   events: {
     'click':  function (evt) {
 	if(document.querySelector('#P1')){
-				this.el1 = document.querySelector('#A1')
+		this.el1 = document.querySelector('#A1')
 		this.el2 = document.querySelector('#A2')
 		this.el3 = document.querySelector('#A3')
+		this.el4 = document.querySelector('#A4')
+		this.el5 = document.querySelector('#A5')
 
 		} else {
 					this.el1 = document.querySelector('#B1')
 		this.el2 = document.querySelector('#B2')
 		this.el3 = document.querySelector('#B3')
+		this.el4 = document.querySelector('#B4')
+		this.el5 = document.querySelector('#B5')
 			}
- if(this.el1.getAttribute('visible') && this.el2.getAttribute('visible') && this.el3.getAttribute('visible')){
-	  if(this.el1.getAttribute('material').color === "red" && this.el2.getAttribute('material').color === "red" && this.el3.getAttribute('material').color === "red"){
+ if(this.el1.getAttribute('visible') && this.el2.getAttribute('visible') && this.el3.getAttribute('visible') && this.el4.getAttribute('visible') && this.el5.getAttribute('visible')){
+	  if(this.el1.getAttribute('material').color === "red" && this.el2.getAttribute('material').color === "red" && this.el3.getAttribute('material').color === "red" && this.el4.getAttribute('material').color === "red" && this.el5.getAttribute('material').color === "red"){
 		       this.el.setAttribute('material', {color:"black"});
 		       this.selection.setAttribute('text', {value: this.el.getAttribute("text").value})
 		       NAF.utils.takeOwnership( this.selection);
@@ -605,7 +615,6 @@ tick:  function() {
 				
 				}
 				
-				
 			}
 	
 
@@ -650,8 +659,8 @@ tick:  function() {
 		
 		var A = document.querySelector('#A');
         var B = document.querySelector('#B');
+        var selection = document.querySelector('#selection');
 
-	  	  
 	 const objects = ["House","Car","Game","Company","Computer","Build","Buy","Sell","Love","Steal",
 	 "Buy a House","Buy a Car","Buy a Game","Buy a Company","Buy a Computer",
 	 "Build a House","Build a Car","Build a Game","Build a Company","Build a Computer",
@@ -673,11 +682,13 @@ tick:  function() {
 					  A.setAttribute("visible",true)
 					  B.setAttribute("visible",false)
 						  }
+				selection.setAttribute("text",{value:"none"})
+				NAF.utils.takeOwnership(selection)
 			      NAF.utils.takeOwnership(A);
 			      NAF.utils.takeOwnership(B);
 
 
-   while (options.length < 3) {
+   while (options.length < 5) {
       new_object = objects[Math.floor(Math.random()*objects.length)];
       if(!options.includes(new_object)){
 		  options.push(new_object)}
@@ -692,7 +703,7 @@ let shuffled_options = options
    optionB = "B"
    option_id = ""
     option_idB = ""
-    for (let i = 0; i < 3; i++) { 
+    for (let i = 0; i < 5; i++) { 
       option_id = option+""+(i+1)
       option_idB = optionB+""+(i+1)
 

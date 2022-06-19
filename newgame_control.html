@@ -285,7 +285,7 @@
         
         <a-entity id="alert" text="align:center;wrapCount:10;" networked="template:#alert-template;networkId:alert;persistent:true;owner:scene" restart></a-entity>
         <a-entity id="alert2" text="align:center;wrapCount:10;" rotation="0 180 0" networked="template:#alert-template;networkId:alert2;persistent:true;owner:scene" restart></a-entity>
-      
+       
      <a-entity id="states" text="value:P1D2" networked="template:#state-template;networkId:state;persistent:true;owner:scene" visible="false" ></a-entity>
           <a-entity id="selection" text="value:none" networked="template:#selection-template;networkId:selection;persistent:true;owner:scene" visible="false" ></a-entity>
          <a-entity id="score" text="align:center;wrapCount:10;value:0" rotation="0 180 0"  networked="template:#score-template;networkId:alert3;persistent:true;owner:scene" visible="true" ></a-entity>
@@ -586,6 +586,7 @@ tick:  function() {
 			}
 				
 				}
+				
 			}
 	
 
@@ -631,7 +632,13 @@ tick:  function() {
 		var A = document.querySelector('#A');
         var B = document.querySelector('#B');
 
-	  const objects = ["Car", "House", "Beach", "Peace", "Love", "Thunder","Music","War","Joke","Magic"];
+	  
+	 const objects = ["House","Car","Game","Company","Computer","Build","Buy","Sell","Love","Steal",
+	 "Buy a House","Buy a Car","Buy a Game","Buy a Company","Buy a Computer",
+	 "Build a House","Build a Car","Build a Game","Build a Company","Build a Computer",
+	 "Sell a House","Sell a Car","Sell a Game","Sell a Company","Sell a Computer",
+	 "Love a House","Love a Car","Love a Game","Love a Company","Love a Computer",
+	 "Steal a House","Steal a Car","Steal a Game","Steal a Company","Steal a Computer"];
       var object = objects[Math.floor(Math.random()*objects.length)];
       var options = [object]
      var x = 1

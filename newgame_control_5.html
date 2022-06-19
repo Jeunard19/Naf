@@ -20,13 +20,11 @@
      <script src="https://cdn.jsdelivr.net/gh/IdeaSpaceVR/aframe-particle-system-component@master/dist/aframe-particle-system-component.min.js"></script>
     <!--<script src="https://cdn.jsdelivr.net/gh/IdeaSpaceVR/aframe-particle-system-component@master/dist/aframe-particle-system-component.min.js"></script>-->
     <script src="/js/spawn-in-circle.component.js"></script>
-    <script src="/js/positioner2.component.js"></script>
+    <script src="/js/positioner.component.js"></script>
     <script src="/js/logger.component.js"></script>
     <script src="/js/highlight.js"></script>
     <script src="/js/menu_visible.js"></script> 
     <script src="/js/game.js"></script> 
-    <script src="/js/rotatemovement.component.js"></script> 
-    
      <script>
       // see issue https://github.com/networked-aframe/networked-aframe/issues/267
       NAF.schemas.getComponentsOriginal = NAF.schemas.getComponents;
@@ -40,7 +38,7 @@
           
               'showall',
               'logger',
-              'positioner2',
+              'positioner',
 
 
  
@@ -108,8 +106,7 @@
           });
         }
         
-        
-                   if (!NAF.schemas.hasTemplate("#score-template")) {
+                        if (!NAF.schemas.hasTemplate("#score-template")) {
           NAF.schemas.add({
             template: '#score-template',
             components: [
@@ -145,7 +142,7 @@
   <body>
 	  
     <a-scene networked-scene="
-      room: myroom3;
+      room: myroom6;
       debug: true;
       adapter: wseasyrtc;"
       
@@ -202,7 +199,6 @@
         <template id ="alert-template">
         <a-entity position="0 1.5 0"  ></a-entity>
         </template>
-        
          <template id ="score-template">
         <a-entity position="0 1 0"  ></a-entity>
         </template>
@@ -231,7 +227,7 @@
         <!--      a few spheres make a head + eyes + pupils    -->
         <template id="head-template">
      <a-entity class="avatar" player-info>
-            <a-entity class="face" position="0 1.5 0" >
+            <a-entity class="face" position="0 0.05 0" >
             </a-entity>
           </a-entity>
         </template>
@@ -244,6 +240,7 @@
   
   
   
+  
   <template id="ball-template2">
 
           <a-entity geometry="primitive: sphere; radius: 0.15" material="color: green" ></a-entity>
@@ -251,8 +248,6 @@
   </template>
   
 
-
-  
     <template id="state-template">
 
           <a-entity ></a-entity>
@@ -267,9 +262,7 @@
 			
 			
 		</a-assets>
-		
- 
-
+	
 
         
         <a-entity id="model" visible="true" game2 >
@@ -283,31 +276,32 @@
    
           <a-plane id = "A2"  visible="true" text="value: Hello World;align:center;wrapCount:10;" width="1" height="0.5" color="red" position="0 0.5 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:A2;persistent:true;owner:scene" changestate></a-plane>
           <a-plane id = "A3" visible="true"  text="value: Hello World;align:center;wrapCount:10;" width="1" height="0.5" color="red" position="1.5 0.5 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:A3;persistent:true;owner:scene" changestate ></a-plane>
+                 <a-plane id = "A4"  visible="true" text="value: Hello World;align:center;wrapCount:10;" width="1" height="0.5" color="red" position="-3 0.5 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:A4;persistent:true;owner:scene" changestate></a-plane>
+          <a-plane id = "A5" visible="true"  text="value: Hello World;align:center;wrapCount:10;" width="1" height="0.5" color="red" position="3 0.5 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:A5;persistent:true;owner:scene" changestate ></a-plane>
+          
           <a-plane id = "B1" visible="true"  text="value: Hello World;align:center;wrapCount:10;" width="1" height="0.5" color="red" position="-1.5 0.5 0" rotation="0 180 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:B1;persistent:true;owner:scene" changestate></a-plane>
           <a-plane id = "B2" visible="true"  text="value: Hello World;align:center;wrapCount:10;" width="1" height="0.5" color="red" position="0 0.5 0" rotation="0 180 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:B2;persistent:true;owner:scene" changestate></a-plane>
           <a-plane id = "B3" visible="true"  text="value: Hello World;align:center;wrapCount:10;"  width="1" height="0.5" color="red" position="1.5 0.5 0" rotation="0 180 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:B3;persistent:true;owner:scene" changestate></a-plane>
-          
+           <a-plane id = "B4" visible="true"  text="value: Hello World;align:center;wrapCount:10;" width="1" height="0.5" color="red" position="-3 0.5 0" rotation="0 180 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:B4;persistent:true;owner:scene" changestate></a-plane>
+          <a-plane id = "B5" visible="true"  text="value: Hello World;align:center;wrapCount:10;"  width="1" height="0.5" color="red" position="3 0.5 0" rotation="0 180 0" material="opacity: 0.3; transparent: true" networked="template:#sphere-template;networkId:B5;persistent:true;owner:scene" changestate></a-plane>
+       
           
         </a-entity>
         
-        <a-entity id="alert" text="align:center;wrapCount:10;" networked="template:#alert-template;networkId:alert;persistent:true;owner:scene" restart>
-        
-        </a-entity>
-        <a-entity id="alert2" text="align:center;wrapCount:10;" rotation="0 180 0" networked="template:#alert-template;networkId:alert2;persistent:true;owner:scene" restart>
-          
-        </a-entity>
+        <a-entity id="alert" text="align:center;wrapCount:10;" networked="template:#alert-template;networkId:alert;persistent:true;owner:scene" restart></a-entity>
+        <a-entity id="alert2" text="align:center;wrapCount:10;" rotation="0 180 0" networked="template:#alert-template;networkId:alert2;persistent:true;owner:scene" restart></a-entity>
+      
+     <a-entity id="states" text="value:P1D2" networked="template:#state-template;networkId:state;persistent:true;owner:scene" visible="false" ></a-entity>
+          <a-entity id="selection" text="value:none" networked="template:#selection-template;networkId:selection;persistent:true;owner:scene" visible="false" ></a-entity>
          <a-entity id="score" text="align:center;wrapCount:10;value:0" rotation="0 180 0"  networked="template:#score-template;networkId:alert3;persistent:true;owner:scene" visible="true" ></a-entity>
           <a-entity id="score2" text="align:center;wrapCount:10;value:0" rotation="0 0 0" networked="template:#score-template;networkId:alert4;persistent:true;owner:scene" visible="true" ></a-entity>
         
-       
-     <a-entity id="states" text="value:P1D2" networked="template:#state-template;networkId:state;persistent:true;owner:scene" visible="false" ></a-entity>
-          <a-entity id="selection" text="value:none" networked="template:#selection-template;networkId:selection;persistent:true;owner:scene" visible="false" ></a-entity>
 
 
    <a-entity id="camera-rig"
                 tracked-vr-hands wasd-controls
                 movement-controls="fly:true;"
-                positioner2 rotatemovement
+                positioner
                 networked="template:#camera-rig-template;"
       >
         <a-entity id="local-avatar" camera position="0 1.6 0" look-controls 
@@ -341,17 +335,21 @@ init: function(){
   events: {
     'click':  function (evt) {
 	if(document.querySelector('#P1')){
-				this.el1 = document.querySelector('#A1')
+		this.el1 = document.querySelector('#A1')
 		this.el2 = document.querySelector('#A2')
 		this.el3 = document.querySelector('#A3')
+		this.el4 = document.querySelector('#A4')
+		this.el5 = document.querySelector('#A5')
 
 		} else {
-					this.el1 = document.querySelector('#B1')
+		this.el1 = document.querySelector('#B1')
 		this.el2 = document.querySelector('#B2')
 		this.el3 = document.querySelector('#B3')
+		this.el4 = document.querySelector('#B4')
+		this.el5 = document.querySelector('#B5')
 			}
- if(this.el1.getAttribute('visible') && this.el2.getAttribute('visible') && this.el3.getAttribute('visible')){
-	  if(this.el1.getAttribute('material').color === "red" && this.el2.getAttribute('material').color === "red" && this.el3.getAttribute('material').color === "red"){
+ if(this.el1.getAttribute('visible') && this.el2.getAttribute('visible') && this.el3.getAttribute('visible') && this.el4.getAttribute('visible') && this.el5.getAttribute('visible')){
+	  if(this.el1.getAttribute('material').color === "red" && this.el2.getAttribute('material').color === "red" && this.el3.getAttribute('material').color === "red" && this.el4.getAttribute('material').color === "red" && this.el5.getAttribute('material').color === "red"){
 		       this.el.setAttribute('material', {color:"black"});
 		       this.selection.setAttribute('text', {value: this.el.getAttribute("text").value})
 		       NAF.utils.takeOwnership( this.selection);
@@ -372,14 +370,14 @@ init: function(){
 		init:function(){
 			this.counter =0
 			this.results = "non"
-			this.score = 0
 			}
 		,
 		tick:function(){
 	var player = document.querySelector('#P3')
 	if(player){ 
-	var score = document.querySelector('#score')
+		var score = document.querySelector('#score')
 	var score2 = document.querySelector('#score2')
+		
 		
   	if(this.el.getAttribute('material').color === "black"){
 		this.counter += 1
@@ -397,14 +395,7 @@ if(this.results === "non"){
 			score2.setAttribute("text",{value:score_current})
 			NAF.utils.takeOwnership(score)
 			NAF.utils.takeOwnership(score2)
-				} 
-				
-		
-				
-	
-		
-	
-			} else {
+			} }else {
 				this.results = "incorrect"
 				}
 		
@@ -429,7 +420,7 @@ if(this.results === "non"){
 					 this.el.setAttribute("material",{color:"red"})
 					 
 					 NAF.utils.takeOwnership(this.el)
-					 		NAF.utils.takeOwnership(state)
+					 NAF.utils.takeOwnership(state)
 			}
 	
 		
@@ -605,7 +596,6 @@ tick:  function() {
 				
 				}
 				
-				
 			}
 	
 
@@ -658,7 +648,7 @@ tick:  function() {
 	 "Sell a House","Sell a Car","Sell a Game","Sell a Company","Sell a Computer",
 	 "Love a House","Love a Car","Love a Game","Love a Company","Love a Computer",
 	 "Steal a House","Steal a Car","Steal a Game","Steal a Company","Steal a Computer"];
-      var object = objects[Math.floor(Math.random()*objects.length)];
+	   var object = objects[Math.floor(Math.random()*objects.length)];
       var options = [object]
      var x = 1
 			
@@ -677,7 +667,7 @@ tick:  function() {
 			      NAF.utils.takeOwnership(B);
 
 
-   while (options.length < 3) {
+   while (options.length < 5) {
       new_object = objects[Math.floor(Math.random()*objects.length)];
       if(!options.includes(new_object)){
 		  options.push(new_object)}
@@ -692,7 +682,7 @@ let shuffled_options = options
    optionB = "B"
    option_id = ""
     option_idB = ""
-    for (let i = 0; i < 3; i++) { 
+    for (let i = 0; i < 5; i++) { 
       option_id = option+""+(i+1)
       option_idB = optionB+""+(i+1)
 
